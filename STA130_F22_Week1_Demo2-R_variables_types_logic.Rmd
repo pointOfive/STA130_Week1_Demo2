@@ -1,0 +1,246 @@
+---
+title: "R data types Demo"
+author: "Scott Schwartz"
+date: "Module 1"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+This demo introduces R variables, data types, and logical operations:
+
+<!-- https://stackoverflow.com/questions/62413619/what-is-the-difference-between-typeof-and-class-functions-and-when-are-they -->
+
+1. Atomic Types: `typeof()`
+  1. Variables: `my_variable` 
+  2. Assignments: `<-` (and `->` and `=`)
+  3. "double": `typeof(1)`, `typeof(1.1)`
+  4. "logical": `typeof(FALSE)`,`typeof(TRUE)`
+  5. "character": `typeof("strings")`
+  6. Coercion: `as.integer(1)`,`as.integer(TRUE)`
+2. Data Structures I: `class()`
+  1. "numeric": `class(1)`, `class(1.1)`
+  1. "factor": `class(as.factor("word"))`, `typeof(as.factor("word"))`, `is.integer(as.factor("word"))`
+  2. "integer": `is.integer(1)`, `is.integer(as.integer(1))`
+  3. **Continuous** "numeric" ("double")
+  4. **Discrete Ordinal** "numeric" ("double")
+  5. **Discrete Nominal** "factor" ("integer")
+3. Data Structures II
+  1. Vectors: `c(1,2,3)`, `c(1,as.integer(1),"1")`
+  2. (OLD) Data Frames: `read.csv()`
+  3. (NEW) Tibbles: `read_csv()` 
+  4. **Columns**: variables (but not "R variables"!) 
+    - These are the specific things that are observed and recorded 
+  5. **Rows**: observational units (on which variables are observed and recorded)
+    - These are the exchangeable "individuals" whose measurements are recorded
+    - The value of a specific variable for a specific row is one piece of the
+      collection of information on an entire row which comprise an "observation" 
+4. Indispensable Functions 
+  1. Summary functions: `glimpse()` and `head()`
+  2. Pipe: `%>%` cmd-shift-M (Mac) and ctrl-shift-M (PC)
+5. Logical Operators
+  1. "equal" `==`: `1==1`, `c(0,1)==c(1,1)`
+  1. "not equal" `!=`: `1!=1`, `c(0,1)!=c(1,1)`
+  2. "comparison" `<`,`>`,`<=`,`>=`: `1<=1`, `c(0,1)<c(1,1)`
+  3. "not" `!`: `!(1==0)`  
+  4. "and" `&`: `c(FALSE,TRUE) & c(TRUE,TRUE)`
+  5. "or" `|`: `c(FALSE,TRUE) & c(TRUE,TRUE)`
+6. Boolean Mask Vectors: `[]` usage
+
+
+
+# quiz questions
+- head vs glimpse preference
+- types in columns
+- read/match "and then" pipe statement
+- other things?
+
+## Question 1: Atomic Types
+
+### (a) Assign the sum `3+0.14` to `my_variable` and make a vector of the `class()` and `typeof()` of `my_variable`.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE}
+my_variable <- 3+0.14
+class(my_variable)
+typeof(my_variable)
+```
+
+### (b) Make the assignment `my_number <- 3` and see which of `is.integer(my_number)`, `is.double(my_number)`, and `isnumeric(my_number)` is true.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE}
+my_number <- 3
+is.integer(my_number)
+is.double(my_number)
+is.numeric(my_number)
+```
+
+### (c) Assign your name `"<your name>"` as a string to `my_name` and make a vector of the `class()` and `typeof()` `my_name`.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE}
+my_name <- "Scott Schwartz"
+class(my_name)
+typeof(my_name)
+```
+
+## Question 2: Vectors
+
+### (a) Assign `c(1,as.integer(1),"1")` to `my_vector` and determine the the `class()` and `typeof()` of `my_vector`.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE}
+my_vector <- c(1,as.integer(1),"1")
+c(class(my_vector), typeof(my_vector))
+```
+
+### (b) For `my_vector` up above, which of `as.numeric(my_vector)`, `as.logical(my_vector)`, `as.character(my_vector)`, and `as.integer(my_vector)` work? 
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE}
+my_vector <- c(1,as.integer(1),"1")
+c(class(as.numeric(my_vector)),
+  class(as.logical(my_vector)),
+  class(as.character(my_vector)),
+  class(as.integer(my_vector)))
+```
+
+### (c) Using `my_vector` from above, for which of `sum(my_vector)`, `sum(as.logical(my_vector))`, and `as.logical(as.numeric(my_vector))` does coercion work to produce `3`?
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE}
+sum(my_vector)
+sum(as.logical(my_vector))
+sum(as.logical(as.numeric(my_vector)))
+```
+
+### (d) What is the `class()` and `typeof()` of `c(1,2,3)`?
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE}
+c(class(c(1,2,3)),typeof(c(1,2,3)))
+```
+
+## Question 3: Review
+
+### (a) What are the first two lines of this code doing?
+
+```{r, eval=TRUE, message=TRUE}
+library(tidyverse)
+coffee_ratings <- read_csv("coffee_ratings.csv")
+coffee_ratings %>%
+  ggplot(aes(x=total_cup_points)) +
+  geom_histogram(bins=30, color="black", fill="light blue")
+```
+
+### (b) Can you read the finel three lines of the code above? What do you roughly think it's doing?
+
+### (c) What parts of the code are parameters and what are parts are arguments?
+
+### (d) What does the `%>%` seem to be doing in the code above?
+
+### (e) What does the `+` seem to be doing in the code above?
+
+
+## Question 4: Tibbles
+
+### (a) Without variable assignments, use the `%>%` "pipe" command to find the `class()` of `tibble::tibble(col=c(1,2,3))`
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE}
+tibble(col=c(1,2,3)) %>% class()
+```
+
+### (b) Without variable assignments, use the `%>%` "pipe" command to find out the `class()` of `read_csv()`.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+read_csv("coffee_ratings.csv") %>% class()
+```
+
+
+### (c) Wihtout variable assignments, use the `%>%` "pipe" command and `head()` function to examine the types of the `coffee_ratings` data set.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+coffee_ratings %>% head()
+```
+
+### (d) Wihtout variable assignments, use the `%>%` "pipe" command and `glimpse()` function to examine the types of the `coffee_ratings` data set.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+coffee_ratings %>% glimpse()
+```
+
+### (e) Do you prefer the `head()` or the `glimpse()` output? Why?
+
+
+## Question 5: Factors
+
+### (a) Confirm the observed column data types using the following stackoverflow conversation.
+
+- https://stackoverflow.com/questions/21125222/determine-the-data-types-of-a-data-frames-columns
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+sapply(coffee_ratings, class)
+```
+
+### (b) Change column data types in the `coffee_ratings` data and confirm the change using the code provided below based on the following stackoverflow conversation.
+
+- https://stackoverflow.com/questions/27668266/dplyr-change-many-data-types
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+coffee_ratings <- coffee_ratings %>% mutate(across(where(is.character), as.factor))
+coffee_ratings %>% glimpse()
+```
+
+
+## Question 6: Boolean Vector Masks
+
+### (a) Create the variable `coffee_ratings_nlevels` which lists the number of factor levels of each column using the provided code based on the following stackoverflow conversation and `nlevels` documentation.
+
+- https://stackoverflow.com/questions/27676404/list-all-factor-levels-of-a-data-frame
+- https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/nlevels
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+coffee_ratings_nlevels <- sapply(coffee_ratings, nlevels)
+coffee_ratings_nlevels
+```
+
+(b) Create a boolean mask vector from the `coffee_ratings_nlevels` variable above which is `TRUE` for each column with two or more but less than ten factor levels and `FALSE` otherwise using the provided code below.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+coffee_ratings_nlevels_boolean_mask <- (coffee_ratings_nlevels > 1) & (coffee_ratings_nlevels < 10)
+```
+
+(c) List the factor levels of each column with two or more factor levels using a vector boolean mask code provided below.
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+sapply(coffee_ratings, levels)[coffee_ratings_nlevels_boolean_mask]
+```
+
+## More Resources
+
+Looking for other presentations of this material? Try out the following resources.
+
+- [Rstudio Primer: Programming Basics](https://rstudio.cloud/learn/primers/1.2)
+
+- [R for Data Science Chapter 4: Workflow basics](https://r4ds.had.co.nz/workflow-basics.html)
+
+- [The Department of Statistical Science Toolkit](https://dosstoolkit.com/)
+
+## Module 1 Homework Preview
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+https://www.tidyverse.org/
+library(tidyverse)
+```
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+# https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-08-11/readme.md
+#install.packages("appa")
+# https://github.com/averyrobbins1/appa
+#devtools::install_github("averyrobbins1/appa")
+library(appa)
+?appa
+```
+
+```{r, eval=FALSE, echo=FALSE, include=TRUE, message=FALSE}
+avatar <- read_csv("avatar.csv")
+avatar %>% glimpse()
+```
+
